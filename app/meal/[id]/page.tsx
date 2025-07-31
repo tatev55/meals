@@ -12,7 +12,7 @@ type Meal = {
   strArea: string,
   strYoutube: string | null,
   strMealThumb: string | null,
-  [key: string]: any,
+  [key: string]: string | null
 }
 
 type MealResponse = {
@@ -36,7 +36,7 @@ export default async function MealPage({ params }: Params) {
   const ingredients: { ingredients: string, measure: string }[] = []
   for (let i = 1; i <= 20; i++) {
     const ing = meal[`strIngredient${i}`]
-    const mea = meal[`strMeasure${i}`]
+     const mea = meal[`strMeasure${i}`] ??''
     if (ing && ing !== '') {
       ingredients.push({ ingredients: ing, measure: mea })
     }

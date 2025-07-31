@@ -51,8 +51,12 @@ export function SearchProvider ({children}: {children : ReactNode}) {
                     }
                     const data = await res.json();
                     setMeals(data.meals || [])
-                } catch (error:any) {
-                    console.log(error.message)
+                } catch (error:unknown) {
+                    if (error instanceof Error) {
+                        console.log(error.message)
+                    } else {
+                        console.log('Something went wrong')
+                    }
                 }finally{
                     setIsLoading(false)
                 }
