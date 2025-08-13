@@ -1,16 +1,26 @@
-'use client '
+'useClient'
 
-import { useSerch } from "@/context/SearchContext"
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from "react"
 import Link from "next/link"
 import Image from 'next/image';
 
-export const GloabalSearch = () => {
-    const { query, setQuery, isLoading, meals } = useSerch();
+type  Meal = {
+    idMeal: number,
+    isMeal : number,
+    strMeal : string,
+    strMealThumb: string
+}
+
+const GloabalSearch2 = () => {
+    const [query, setQuery] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [meals, setMeals] = useState<Meal[]>([]);
     const [open, setOpen] = useState(false);
     const ref = useRef<HTMLInputElement>(null)
 
-    useEffect(() => {
+
+
+     useEffect(() => {
         const handleOutsideClick = (event: MouseEvent) => {
             if (ref.current && !ref.current.contains(event.target as Node)) {
                 setOpen(false);
@@ -23,6 +33,47 @@ export const GloabalSearch = () => {
             document.removeEventListener('mousedown', handleOutsideClick);
         })
     }, [])
+
+
+     useEffect(() => {
+        if(query.trim().length=== 0){
+            setMeals([])
+            setIsLoading(false)
+            return
+            
+        }
+
+        setIsLoading(true);
+        const ac = new AbortController();
+
+       const timer =  setTimeout(async ()=> {
+                try {
+                    const res = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`,{
+                        signal:ac.signal
+                    })
+    
+                    if(!res.ok){
+                        throw new Error('Failed to fetch data')
+                    }
+                    const data = await res.json();
+                    setMeals(data.meals || [])
+                } catch (error:unknown) {
+                    if (error instanceof Error) {
+                        console.log(error.message)
+                    } else {
+                        console.log('Something went wrong')
+                    }
+                }finally{
+                    setIsLoading(false)
+                }
+        }, 500)
+
+        return(() => {
+            ac.abort();
+            clearTimeout(timer);
+        })
+    },[query])
+
 
     return (
         <div className="relative w-100 mt-4" ref={ref}>
@@ -70,4 +121,7 @@ export const GloabalSearch = () => {
             }
         </div>
     )
+
 }
+
+export default GloabalSearch2;

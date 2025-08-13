@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo, } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import Link from "next/link";
 
 type Meal = {
@@ -13,18 +13,29 @@ type Props = {
     meals: Meal[]
 }
 
-export default function PaginatedMeals({meals}: Props){
+export default function MealsList({meals}: Props){
 
     const[page, setPage] = useState(1);
+    const [query, setQuery] = useState('');
+    const inputRef = useRef<HTMLInputElement>(null);
     const itemsPerPage = 8;
 
+     useEffect(() => {
+            inputRef.current?.focus();
+    }, []);
 
-    const totalPages =  Math.ceil(meals.length / itemsPerPage)
+
+    const filtered = useMemo(() => meals.filter((meal) => {
+        return meal.strMeal.toLowerCase().includes(query.toLowerCase());
+    }),[query])
+
+    const totalPages = useMemo(() => Math.ceil(filtered.length / itemsPerPage), [filtered]);
+
 
     const current = useMemo(() => {
         const start = (page - 1) * itemsPerPage;
-        return meals.slice(start, start + itemsPerPage)
-    }, [page ])
+        return filtered.slice(start, start + itemsPerPage)
+    }, [page, filtered])
 
     const handlePrev =() => setPage(p => Math.max(1, p - 1));
     const handleNext = () => setPage(p => Math.min(totalPages, p + 1))
@@ -34,6 +45,15 @@ export default function PaginatedMeals({meals}: Props){
 
     return (
         <div className = 'container  p-4 text-center'> 
+            <input
+                value = {query}
+                onChange={(e) => {setQuery(e.target.value); setPage(1)}}
+                type="text"
+                placeholder="Search for a meal ..."
+                className="p-1 m-1"
+                ref={inputRef}
+                
+            />
             <ul className = 'grid md:grid-cols-2 lg:grid-cols-4 gap-4'>
                 {current.map((meal) =>
                     <li key = {meal.idMeal} className= 'text-center shadow-md'>

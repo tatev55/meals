@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from 'next/image';
 
 type Params = {
   params: Promise<{ id: string }>
@@ -53,9 +54,11 @@ export default async function MealPage({ params }: Params) {
        
         {meal.strMealThumb && (
           <div className="flex justify-center mb-6">
-            <img
+            <Image
               src={meal.strMealThumb}
               alt={meal.strMeal}
+              width={500}
+              height={300}
               className="rounded-lg shadow-md w-full max-w-md hover:scale-105 transition-transform duration-300"
             />
           </div>

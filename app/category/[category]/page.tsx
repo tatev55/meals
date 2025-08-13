@@ -1,6 +1,6 @@
 "use server"
 
-import PaginatedMeals from "@/components/PaginatedMeals"
+import MealsList from "@/components/MealsList"
 
 
 type Meal = {
@@ -33,7 +33,7 @@ export  default async function CategoryPage({params} : Params) {
     return (
         <div className = 'container  p-4'>
             <h1 className="text-3xl text-center mb-4 font-bold italic text-green-800">Meals in {category}</h1>
-            <PaginatedMeals  meals={data.meals}/>
+            <MealsList  meals={data.meals}/>
         </div>
     )
 }

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import "./globals.css";
-import { SearchProvider } from "@/context/SearchContext";
+// import { SearchProvider } from "@/context/SearchContext";
 
 
 
@@ -19,11 +19,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <SearchProvider>
+        {/* <SearchProvider> */}
           <Header/>
             {children}
           <Footer/>
-        </SearchProvider>
+        {/* </SearchProvider> */}
       </body>
     </html>
   );

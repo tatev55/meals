@@ -1,7 +1,8 @@
 'use client'
 
 import Link from "next/link"
-import { GloabalSearch } from "./GlobalSearch"
+// import { GloabalSearch } from "./GlobalSearch"
+import GloabalSearch2 from "./GlobalSearch2"
 
 
 
@@ -11,7 +12,8 @@ export function Header() {
             <Link href="/">
                 <h1 className="text-3xl font-bold text-white italic ">Delicious Meals</h1>
             </Link>
-            <GloabalSearch/>
+            {/* <GloabalSearch/> */}
+            <GloabalSearch2/>
         </div>
     )
 }
